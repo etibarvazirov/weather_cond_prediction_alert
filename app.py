@@ -74,13 +74,9 @@ with st.sidebar:
 
     st.markdown("---")
     st.subheader("Optional ML models")
-    pm25_joblib = st.file_uploader("model_pm25.joblib", type=["joblib"])
-    o3_joblib = st.file_uploader("model_o3.joblib", type=["joblib"])
-    use_ml = (pm25_joblib is not None) and (o3_joblib is not None)
-    if use_ml:
-        st.success("Models uploaded — PM2.5 & O₃ will be predicted by ML.")
-    else:
-        st.info("No models uploaded — PM2.5/O₃ will use CAMS baseline.")
+    pm25_joblib = open("model_pm25.joblib", "rb")
+    o3_joblib = open("model_o3.joblib", "rb")
+    use_ml = True
 
     st.markdown("---")
     go_button = st.button("🚀 Run forecast")
@@ -546,3 +542,4 @@ if go_button:
     except Exception as e:
         st.error(f"Error: {e}")
         st.exception(e)
+
