@@ -1,4 +1,5 @@
 # 🌤 AirCast — AI-Powered Real-Time Air Quality Forecast
+**by Skyphoria Team**
 
 **AirCast** is an intelligent Streamlit web application that predicts short-term air quality indicators (PM2.5, O₃, NO₂, and AQI) across major North American cities.  
 The system integrates live atmospheric and meteorological data from **Open-Meteo CAMS** with AI models trained on multi-year environmental datasets, including **NASA DONKI** space-weather observations.  
@@ -142,4 +143,5 @@ LightGBM
 
 Streamlit
  — interactive app framework for data science
+
 
