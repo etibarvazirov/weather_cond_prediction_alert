@@ -631,18 +631,20 @@ if go_button:
         
         # --- Colored AQI card ---
         aqi_val_int = int(aqi_now) if not pd.isna(aqi_now) else None
+
         color = (
-            "green"  if aqi_val_int is not None and aqi_val_int <= 50 else
-            "yellow" if aqi_val_int is not None and aqi_val_int <= 100 else
-            "orange" if aqi_val_int is not None and aqi_val_int <= 150 else
-            "red"    if aqi_val_int is not None and aqi_val_int <= 200 else
-            "purple" if aqi_val_int is not None and aqi_val_int <= 300 else
-            "maroon"
+            "#b6f3b0"  if aqi_val_int is not None and aqi_val_int <= 50 else   # light green
+            "#f5f5b3"  if aqi_val_int is not None and aqi_val_int <= 100 else  # light yellow
+            "#ffd9b3"  if aqi_val_int is not None and aqi_val_int <= 150 else  # peach / soft orange
+            "#ffb3b3"  if aqi_val_int is not None and aqi_val_int <= 200 else  # soft red
+            "#d8b3ff"  if aqi_val_int is not None and aqi_val_int <= 300 else  # lavender
+            "#b38b8b"                                                          # muted maroon
         )
+
         
         st.markdown("### 🧭 Current conditions")
         st.markdown(f"""
-        <div style="padding:14px;border-radius:12px;background-color:{color};color:white;">
+        <div style="padding:14px;border-radius:12px;background-color:{color};color:black;">
           <h3 style="text-align:center;margin:0;">AQI: {aqi_val_int if aqi_val_int is not None else 'N/A'}</h3>
           <p style="text-align:center;margin:6px 0 0 0;">{interpret_aqi(aqi_now)}</p>
         </div>
@@ -688,6 +690,7 @@ if go_button:
     except Exception as e:
         st.error(f"Error: {e}")
         st.exception(e)
+
 
 
 
