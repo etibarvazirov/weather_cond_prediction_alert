@@ -23,12 +23,14 @@ from joblib import load
 # -----------------------------
 # Global config / constants
 # -----------------------------
-# st.set_page_config(page_title="Real-time AQI Forecast", layout="wide")
-# st.title("🌫️ Real-time AQI, PM2.5, O₃, NO₂ Forecast")
 
 st.set_page_config(page_title="AirCast – Real-Time AI Air Quality Forecast", page_icon="🌤")
+
 st.title("🌤 AirCast")
 st.caption("AI-powered real-time air quality and health forecast — helping communities breathe safer.")
+st.markdown("<h6 style='text-align:center; color:gray;'>by <b>Skyphoria Team</b></h6>", unsafe_allow_html=True)
+st.divider()
+
 
 # Default unit conversions
 O3_UGM3_TO_PPB = 0.509
@@ -694,6 +696,7 @@ if go_button:
     except Exception as e:
         st.error(f"Error: {e}")
         st.exception(e)
+
 
 
 
