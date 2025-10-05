@@ -392,8 +392,13 @@ if go_button:
             start_hist = now - timedelta(hours=hist_hours)
 
             # A) Last N hours — OpenAQ first, fallback to CAMS history
-            pm25_rt = fetch_openaq("pm25", start_hist, now, lat, lon, radius_km)
-            o3_rt = fetch_openaq("o3", start_hist, now, lat, lon, radius_km)
+            try:
+                pm25_rt = fetch_openaq("pm25", start_hist, now, lat, lon, radius_km)
+                o3_rt   = fetch_openaq("o3",   start_hist, now, lat, lon, radius_km)
+            except Exception as e:
+                st.warning(f"OpenAQ real-time unavailable — falling back to CAMS. ({e})")
+                pm25_rt, o3_rt = pd.DataFrame(), pd.DataFrame()
+
             if pm25_rt.empty or o3_rt.empty:
                 st.info("OpenAQ returned no data — falling back to CAMS history…")
                 aq_hist_rt = fetch_openmeteo_aq_history(start_hist, now, lat, lon, chunk_days=7)
@@ -542,4 +547,5 @@ if go_button:
     except Exception as e:
         st.error(f"Error: {e}")
         st.exception(e)
+
 
