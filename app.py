@@ -392,20 +392,24 @@ if go_button:
             start_hist = now - timedelta(hours=hist_hours)
 
             # A) Last N hours — OpenAQ first, fallback to CAMS history
-            try:
-                pm25_rt = fetch_openaq("pm25", start_hist, now, lat, lon, radius_km)
-                o3_rt   = fetch_openaq("o3",   start_hist, now, lat, lon, radius_km)
-            except Exception as e:
-                st.warning(f"OpenAQ real-time unavailable — falling back to CAMS. ({e})")
-                pm25_rt, o3_rt = pd.DataFrame(), pd.DataFrame()
+            # try:
+            #     pm25_rt = fetch_openaq("pm25", start_hist, now, lat, lon, radius_km)
+            #     o3_rt   = fetch_openaq("o3",   start_hist, now, lat, lon, radius_km)
+            # except Exception as e:
+            #     st.warning(f"OpenAQ real-time unavailable — falling back to CAMS. ({e})")
+            #     pm25_rt, o3_rt = pd.DataFrame(), pd.DataFrame()
 
-            if pm25_rt.empty or o3_rt.empty:
-                st.info("OpenAQ returned no data — falling back to CAMS history…")
-                aq_hist_rt = fetch_openmeteo_aq_history(start_hist, now, lat, lon, chunk_days=7)
-                if pm25_rt.empty:
-                    pm25_rt = aq_hist_rt["pm25"]
-                if o3_rt.empty:
-                    o3_rt = aq_hist_rt["o3"]
+            # if pm25_rt.empty or o3_rt.empty:
+            #     st.info("OpenAQ returned no data — falling back to CAMS history…")
+            #     aq_hist_rt = fetch_openmeteo_aq_history(start_hist, now, lat, lon, chunk_days=7)
+            #     if pm25_rt.empty:
+            #         pm25_rt = aq_hist_rt["pm25"]
+            #     if o3_rt.empty:
+            #         o3_rt = aq_hist_rt["o3"]
+
+            aq_hist_rt = fetch_openmeteo_aq_history(start_hist, now, lat, lon, chunk_days=7)
+            pm25_rt = aq_hist_rt["pm25"]
+            o3_rt   = aq_hist_rt["o3"]
 
             # B) Meteo — history + forecast
             met_hist = fetch_openmeteo_history(start_hist, now, lat, lon, HOURLY_VARS)
@@ -547,5 +551,6 @@ if go_button:
     except Exception as e:
         st.error(f"Error: {e}")
         st.exception(e)
+
 
 
