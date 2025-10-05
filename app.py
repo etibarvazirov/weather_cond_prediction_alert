@@ -72,8 +72,6 @@ with st.sidebar:
     hist_hours = st.slider("History window for lags/rolling (hours)", 24, 168, 72)
     radius_km = st.slider("OpenAQ radius (km)", 5, 50, 25)
 
-    st.markdown("---")
-    st.subheader("Optional ML models")
     pm25_joblib = open("model_pm25.joblib", "rb")
     o3_joblib = open("model_o3.joblib", "rb")
     use_ml = True
@@ -551,6 +549,7 @@ if go_button:
     except Exception as e:
         st.error(f"Error: {e}")
         st.exception(e)
+
 
 
 
