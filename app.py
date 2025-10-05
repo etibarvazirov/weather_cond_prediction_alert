@@ -369,6 +369,143 @@ def run_nowcast(aq_fc, pm25_rt, o3_rt, lat, lon):
 
     return nowcast
 
+#-------------------Human-friendly guidance block ----------------------------
+
+# --- Safety helpers: robust value getters ---
+def _safe(series_or_df, col=None, idx=-1, default=np.nan):
+    """Safely get a scalar from a Series/DataFrame; return default if missing."""
+    try:
+        if isinstance(series_or_df, pd.Series):
+            if len(series_or_df) == 0:
+                return default
+            return float(series_or_df.iloc[idx])
+        elif isinstance(series_or_df, pd.DataFrame) and col in series_or_df.columns:
+            if len(series_or_df) == 0:
+                return default
+            return float(series_or_df[col].iloc[idx])
+    except Exception:
+        pass
+    return default
+
+# --- AQI interpretation (US EPA-style categories) ---
+def interpret_aqi(aqi):
+    if pd.isna(aqi): return "Air quality data not available right now."
+    if aqi <= 50:   return "Air quality is GOOD — outdoor activities are safe."
+    if aqi <= 100:  return "Air quality is MODERATE — sensitive groups should limit prolonged outdoor exertion."
+    if aqi <= 150:  return "UNHEALTHY for sensitive groups — consider reducing outdoor time, especially near traffic."
+    if aqi <= 200:  return "UNHEALTHY — everyone may experience effects; stay indoors if possible."
+    if aqi <= 300:  return "VERY UNHEALTHY — avoid outdoor activity; consider air purification indoors."
+    return "HAZARDOUS — emergency conditions; stay indoors and minimize exposure."
+
+def action_tips(aqi):
+    """Short actionable tips for the current AQI."""
+    if pd.isna(aqi): return []
+    if aqi <= 50:
+        return ["Open windows to ventilate if comfortable.", "Great time for outdoor exercise."]
+    if aqi <= 100:
+        return ["Sensitive groups (children, elderly, asthma) limit long outdoor exercise.", "Prefer routes away from heavy traffic."]
+    if aqi <= 150:
+        return ["Reduce outdoor time; take breaks indoors.", "If you have a mask (P2/N95), consider using it outside."]
+    if aqi <= 200:
+        return ["Avoid outdoor exercise; keep windows closed.", "Use air purifier if available."]
+    if aqi <= 300:
+        return ["Stay indoors; avoid strenuous activity.", "Use purifier and well-fitting mask outdoors."]
+    return ["Stay indoors; follow local health advisories.", "Seek clean-air shelters if available."]
+
+# Pollutant-specific, friendly messages
+def pm25_msg(pm):
+    if pd.isna(pm): return "PM2.5: data not available."
+    if pm <= 12:    return "PM2.5 is low — fine particle levels are safe."
+    if pm <= 35:    return "PM2.5 is moderate — ventilate carefully; sensitive groups take it easy outdoors."
+    return "PM2.5 is elevated — consider limiting outdoor exposure, especially for sensitive groups."
+
+def o3_msg(o3_ugm3, o3_ppb):
+    if pd.isna(o3_ppb): return "O₃: data not available."
+    if o3_ppb <= 60:    return f"O₃ is comfortable (~{o3_ppb:.0f} ppb)."
+    if o3_ppb <= 120:   return f"O₃ slightly elevated (~{o3_ppb:.0f} ppb) — avoid long outdoor exercise at midday."
+    return f"O₃ high (~{o3_ppb:.0f} ppb) — limit afternoon outdoor activity."
+
+def no2_msg(no2_ppb):
+    if pd.isna(no2_ppb): return "NO₂: data not available."
+    if no2_ppb <= 50:    return f"NO₂ is low (~{no2_ppb:.0f} ppb) — typical urban background."
+    if no2_ppb <= 100:   return f"NO₂ moderate (~{no2_ppb:.0f} ppb) — avoid busy roads if possible."
+    return f"NO₂ high (~{no2_ppb:.0f} ppb) — try to avoid traffic corridors and peak hours."
+
+# --- Determine “current” conditions (prefer NOWCAST ; fallback to forecast) ---
+aqi_now = _safe(nowcast, "AQI_now", idx=0, default=np.nan) if "AQI_now" in nowcast.columns else np.nan
+if pd.isna(aqi_now):
+    aqi_now = _safe(out, "AQI", idx=0, default=np.nan)
+
+pm_now   = _safe(nowcast, "pm25_nowcast", idx=0, default=np.nan)
+if pd.isna(pm_now):
+    pm_now = _safe(out, "pm25_pred", idx=0, default=np.nan)
+
+o3_now_ppb = _safe(nowcast, "o3_nowcast_ppb", idx=0, default=np.nan)
+o3_now_ug  = _safe(nowcast, "o3_nowcast_ugm3", idx=0, default=np.nan)
+if pd.isna(o3_now_ppb):
+    # Convert forecast O3 µg/m³ → ppb if needed
+    o3_f_ug = _safe(out, "o3_pred_ugm3", idx=0, default=np.nan)
+    o3_now_ppb = o3_f_ug * O3_UGM3_TO_PPB if not pd.isna(o3_f_ug) else np.nan
+    o3_now_ug = o3_f_ug
+
+no2_now_ppb = _safe(nowcast, "no2_nowcast_ppb", idx=0, default=np.nan)
+if pd.isna(no2_now_ppb) and "no2_pred_ppb" in out.columns:
+    no2_now_ppb = _safe(out, "no2_pred_ppb", idx=0, default=np.nan)
+
+# --- Colored AQI card ---
+aqi_val_int = int(aqi_now) if not pd.isna(aqi_now) else None
+color = (
+    "green"  if aqi_val_int is not None and aqi_val_int <= 50 else
+    "yellow" if aqi_val_int is not None and aqi_val_int <= 100 else
+    "orange" if aqi_val_int is not None and aqi_val_int <= 150 else
+    "red"    if aqi_val_int is not None and aqi_val_int <= 200 else
+    "purple" if aqi_val_int is not None and aqi_val_int <= 300 else
+    "maroon"
+)
+
+st.markdown("### 🧭 Current conditions")
+st.markdown(f"""
+<div style="padding:14px;border-radius:12px;background-color:{color};color:white;">
+  <h3 style="text-align:center;margin:0;">AQI: {aqi_val_int if aqi_val_int is not None else 'N/A'}</h3>
+  <p style="text-align:center;margin:6px 0 0 0;">{interpret_aqi(aqi_now)}</p>
+</div>
+""", unsafe_allow_html=True)
+
+# --- Compact pollutant summary tiles ---
+cA, cB, cC = st.columns(3)
+with cA:
+    st.metric("PM2.5 (µg/m³)", value="N/A" if pd.isna(pm_now) else f"{pm_now:.1f}")
+with cB:
+    st.metric("O₃ (ppb)", value="N/A" if pd.isna(o3_now_ppb) else f"{o3_now_ppb:.0f}")
+with cC:
+    st.metric("NO₂ (ppb)", value="N/A" if pd.isna(no2_now_ppb) else f"{no2_now_ppb:.0f}")
+
+# --- Friendly health notes ---
+st.subheader("🩺 Health guidance")
+st.write(pm25_msg(pm_now))
+st.write(o3_msg(o3_now_ug, o3_now_ppb))
+st.write(no2_msg(no2_now_ppb))
+
+# --- Actionable tips list ---
+tips = action_tips(aqi_now)
+if tips:
+    st.subheader("✅ What you can do now")
+    for t in tips:
+        st.write(f"- {t}")
+
+# --- Quick 24h outlook: peak AQI and timing (uses forecast `out`) ---
+if isinstance(out, pd.DataFrame) and len(out) > 0 and "AQI" in out.columns:
+    next24 = out.iloc[:min(24, len(out))]  # first 24 forecasted hours
+    if len(next24) > 0:
+        peak_val = float(next24["AQI"].max())
+        peak_time = next24["AQI"].idxmax()
+        st.subheader("⏱ Next 24h outlook")
+        st.write(f"Expected peak AQI in the next 24h: **{peak_val:.0f}** at **{peak_time.strftime('%Y-%m-%d %H:%M UTC')}**.")
+        if peak_val >= 100:
+            st.warning("Air quality may reach unhealthy levels — plan outdoor activities accordingly.")
+
+#-------------------------------------------------------------------
+
 # -----------------------------
 # Main
 # -----------------------------
@@ -549,6 +686,7 @@ if go_button:
     except Exception as e:
         st.error(f"Error: {e}")
         st.exception(e)
+
 
 
 
