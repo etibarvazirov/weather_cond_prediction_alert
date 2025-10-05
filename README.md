@@ -63,7 +63,6 @@ aircast-ai/
 ├── requirements.txt # Python dependencies
 └── README.md # Project documentation
 
-
 ---
 
 ## ⚙️ Installation Guide
@@ -143,3 +142,4 @@ LightGBM
 
 Streamlit
  — interactive app framework for data science
+
