@@ -24,12 +24,12 @@ from joblib import load
 # Global config / constants
 # -----------------------------
 
-st.set_page_config(page_title="AirCast – Real-Time AI Air Quality Forecast", page_icon="🌤")
-
-st.title("🌤 AirCast")
-st.caption("AI-powered real-time air quality and health forecast — helping communities breathe safer.")
+st.set_page_config(page_title="Real-Time Air Quality Forecast for Azerbaijan", page_icon="🌤")
+st.title("🌤 Real-Time Air Quality for Azerbaijan")
+st.caption("Short-term air quality prediction (PM2.5, O₃, NO₂, AQI) with ML and CAMS data.")
 st.markdown("<h6 style='text-align:center; color:gray;'>by <b>Skyphoria Team</b></h6>", unsafe_allow_html=True)
 st.divider()
+
 
 
 # Default unit conversions
@@ -45,45 +45,41 @@ UA_HEADERS = {"User-Agent": "aqi-demo-streamlit/1.0"}
 # -----------------------------
 # Sidebar — user controls
 # -----------------------------
+
 with st.sidebar:
-    st.header("Settings")
+    st.header("Ayarlar")
 
-    # A small preset list for quick North America demo
-    NA_CITIES = {
-        "New York, USA": (40.7128, -74.0060),
-        "Los Angeles, USA": (34.0522, -118.2437),
-        "Chicago, USA": (41.8781, -87.6298),
-        "Houston, USA": (29.7604, -95.3698),
-        "Phoenix, USA": (33.4484, -112.0740),
-        "San Francisco, USA": (37.7749, -122.4194),
-        "Seattle, USA": (47.6062, -122.3321),
-        "Miami, USA": (25.7617, -80.1918),
-        "Boston, USA": (42.3601, -71.0589),
-        "Toronto, Canada": (43.651070, -79.347015),
-        "Vancouver, Canada": (49.2827, -123.1207),
-        "Montreal, Canada": (45.5017, -73.5673),
-        "Mexico City, Mexico": (19.4326, -99.1332),
+    # Preset list for Azerbaijan demo
+    AZ_CITIES = {
+        "Bakı, Azerbaijan": (40.4093, 49.8671),
+        "Gəncə, Azerbaijan": (40.6828, 46.3606),
+        "Sumqayıt, Azerbaijan": (40.5897, 49.6686),
+        "Lənkəran, Azerbaijan": (38.7543, 48.8506),
+        "Şəki, Azerbaijan": (41.1919, 47.1706),
+        "Naxçıvan, Azerbaijan": (39.2089, 45.4122),
     }
-
-    mode = st.radio("Location input", ["Choose city (NA)", "Manual lat/lon"], index=0)
-    if mode == "Choose city (NA)":
-        city = st.selectbox("City", list(NA_CITIES.keys()), index=0)
-        lat, lon = NA_CITIES[city]
-        st.caption(f"Selected: {city} → lat={lat:.4f}, lon={lon:.4f}")
+    
+    mode = st.radio("Location input", ["Şəhər seç", "Manual lat/lon"], index=0)
+    
+    if mode == "Şəhər seç":
+        city = st.selectbox("City", list(AZ_CITIES.keys()), index=0)
+        lat, lon = AZ_CITIES[city]
+        st.caption(f"Seçildi: {city} → lat={lat:.4f}, lon={lon:.4f}")
     else:
-        lat = st.number_input("Latitude", value=40.7128, format="%.6f")
-        lon = st.number_input("Longitude", value=-74.0060, format="%.6f")
+        lat = st.number_input("Latitude", value=40.4093, format="%.6f")
+        lon = st.number_input("Longitude", value=49.8671, format="%.6f")
+
 
     horizon = st.selectbox("Forecast horizon (hours)", [24, 48, 72], index=2)
     hist_hours = st.slider("History window for lags/rolling (hours)", 24, 168, 72)
-    radius_km = st.slider("OpenAQ radius (km)", 5, 50, 25)
 
     pm25_joblib = open("model_pm25.joblib", "rb")
     o3_joblib = open("model_o3.joblib", "rb")
     use_ml = True
 
     st.markdown("---")
-    go_button = st.button("🚀 Run forecast")
+    go_button = st.button("🚀 Proqnozu işə sal")
+
 
 # -----------------------------
 # HTTP helper
@@ -696,6 +692,7 @@ if go_button:
     except Exception as e:
         st.error(f"Error: {e}")
         st.exception(e)
+
 
 
 
