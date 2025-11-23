@@ -141,19 +141,19 @@ if not go_button:
 
             "🌫️ **PM2.5 (2.5 mikronlu toz hissəcikləri)**\n"
             "Ağciyərlərə dərin nüfuz edir, ürək-damar və tənəffüs xəstəliklərini artırır.\n\n"
-            "**    Aralıq:** 0–500 µg/m³ (0–12 yaxşı; 12–35 orta; 35+ risklidir).\n\n"
+            "    **Aralıq:** 0–500 µg/m³ (0–12 yaxşı; 12–35 orta; 35+ risklidir).\n\n"
 
             "🌬️ **O₃ (Ozon)**\n"
             "Günəş işığı + çirkli hava reaksiyası ilə yaranır, göz və ağciyərləri qıcıqlandırır.\n\n"
-            "**    Aralıq:** 0–200 ppb (0–70 yaxşı; 70–120 orta; 120+ riskli).\n\n"
+            "    **Aralıq:** 0–200 ppb (0–70 yaxşı; 70–120 orta; 120+ riskli).\n\n"
 
             "🚗 **NO₂ (Azot dioksidi)**\n"
             "Nəqliyyat və sənaye emissiyalarından yaranır, astmanı ağırlaşdırır.\n\n"
-            "**    Aralıq:** 0–300+ ppb (0–50 yaxşı; 50–100 orta; 100+ riskli).\n\n"
+            "    **Aralıq:** 0–300+ ppb (0–50 yaxşı; 50–100 orta; 100+ riskli).\n\n"
 
             "📊 **AQI (Air Quality Index)**\n"
             "Havanın ümumi keyfiyyət göstəricisidir, ən yüksək risk yaradan komponentə əsaslanır.\n\n"
-            "**    Aralıq:** 0–500 (0–50 yaxşı; 50–100 orta; 100–150 həssas qruplar üçün risk; 150+ hamı üçün riskli)."
+            "    **Aralıq:** 0–500 (0–50 yaxşı; 50–100 orta; 100–150 həssas qruplar üçün risk; 150+ hamı üçün riskli)."
         )
 
 
@@ -768,6 +768,7 @@ if go_button:
     except Exception as e:
         st.error(f"Error: {e}")
         st.exception(e)
+
 
 
 
