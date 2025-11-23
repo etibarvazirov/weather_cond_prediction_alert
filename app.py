@@ -53,33 +53,47 @@ st.html("""
 </div>
 """)
 
-with st.container():
-    st.success(
-        "### 🌿 Tətbiq haqqında ümumi məlumat\n"
-        "Bu tətbiq Azərbaycan üzrə real-time hava keyfiyyəti göstəricilərini (PM2.5, O₃, NO₂) toplamaq, "
-        "təhlil etmək və 24–72 saatlıq proqnoz təqdim etmək üçün hazırlanmışdır. "
-        "Eyni zamanda 0–2 saatlıq NOWCAST modeli vasitəsilə ən yaxın zaman üçün vəziyyəti qiymətləndirir.\n\n"
+# -----------------------
+# Show info block only BEFORE prediction
+# -----------------------
+if not go_button:
+    with st.container():
+        st.success(
+            "### 🌿 Tətbiq haqqında ümumi məlumat\n"
+            "Bu tətbiq Azərbaycan üzrə real-time hava keyfiyyəti göstəricilərini (PM2.5, O₃, NO₂) toplamaq, "
+            "təhlil etmək və 24–72 saatlıq proqnoz təqdim etmək üçün hazırlanmışdır. "
+            "Eyni zamanda 0–2 saatlıq NOWCAST modeli vasitəsilə ən yaxın zaman üçün vəziyyəti qiymətləndirir.\n\n"
 
-        "🌬️ **Real-time məlumatlar:** Open-Meteo CAMS və digər açıq mənbələrdən alınır.\n"
-        "🌡️ **ML əsaslı proqnoz:** PM2.5 və O₃ üçün xüsusi Machine Learning modelləri istifadə olunur.\n"
-        "📊 **Sağlamlıq təhlili:** AQI göstəricisinə görə avtomatik olaraq təhlükə səviyyəsi və tövsiyələr təqdim edilir.\n"
-        "⬇️ **Yükləmə:** Proqnoz və nowcast nəticələrini CSV formatında yükləmək mümkündür.\n\n"
+            "🌬️ **Real-time məlumatlar:**\n"
+            "Open-Meteo CAMS və digər açıq mənbələrdən avtomatik toplanır.\n\n"
 
-        "### 📘 Parametrlərin izahı və aralıqları\n"
-        "🌫️ **PM2.5 (2.5 mikronlu toz hissəcikləri)** — Ağciyərlərə dərin nüfuz edir, "
-        "ürək-damar və tənəffüs xəstəliklərini artırır.\n"
-        "**Aralıq:** 0–500 µg/m³ (0–12 yaxşı; 12–35 orta; 35+ risklidir).\n\n"
+            "🌡️ **ML əsaslı proqnoz:**\n"
+            "PM2.5 və O₃ üçün xüsusi Machine Learning modelləri istifadə olunur.\n\n"
 
-        "🌬️ **O₃ (Ozon)** — Günəş işığı + çirkli hava reaksiyası ilə yaranır, göz və ağciyərləri qıcıqlandırır.\n"
-        "**Aralıq:** 0–200 ppb (0–70 yaxşı; 70–120 orta; 120+ riskli).\n\n"
+            "📊 **Sağlamlıq təhlili:**\n"
+            "AQI göstəricisinə görə təhlükə səviyyəsi və gündəlik tövsiyələr verilir.\n\n"
 
-        "🚗 **NO₂ (Azot dioksidi)** — Nəqliyyat və sənaye emissiyalarından yaranır, astmanı ağırlaşdırır.\n"
-        "**Aralıq:** 0–300+ ppb (0–50 yaxşı; 50–100 orta; 100+ riskli).\n\n"
+            "⬇️ **Yükləmə imkanı:**\n"
+            "Proqnoz və nowcast nəticələrini CSV formatında endirmək mümkündür.\n\n"
 
-        "📊 **AQI (Air Quality Index)** — Havanın ümumi keyfiyyət göstəricisidir, ən yüksək risk yaradan komponentə əsaslanır.\n"
-        "**Aralıq:** 0–500 (0–50 yaxşı; 50–100 orta; 100–150 həssas qruplar üçün risk; 150+ hamı üçün riskli)."
-    )
+            "### 📘 Parametrlərin izahı və aralıqları\n\n"
 
+            "🌫️ **PM2.5 — (2.5 mikronlu toz hissəcikləri)**\n"
+            "Ağciyərlərə dərin nüfuz edir, ürək-damar və tənəffüs xəstəliklərini artırır.\n"
+            "**Aralıq:** 0–500 µg/m³ (0–12 yaxşı; 12–35 orta; 35+ risklidir).\n\n"
+
+            "🌬️ **O₃ — (Ozon)**\n"
+            "Günəş işığı + çirkli hava reaksiyası ilə yaranır, göz və ağciyərləri qıcıqlandırır.\n"
+            "**Aralıq:** 0–200 ppb (0–70 yaxşı; 70–120 orta; 120+ riskli).\n\n"
+
+            "🚗 **NO₂ — (Azot dioksidi)**\n"
+            "Nəqliyyat və sənaye emissiyalarından yaranır, astmanı ağırlaşdırır.\n"
+            "**Aralıq:** 0–300+ ppb (0–50 yaxşı; 50–100 orta; 100+ riskli).\n\n"
+
+            "📊 **AQI — (Air Quality Index)**\n"
+            "Havanın ümumi keyfiyyət göstəricisidir, ən yüksək risk yaradan komponentə əsaslanır.\n"
+            "**Aralıq:** 0–500 (0–50 yaxşı; 50–100 orta; 100–150 həssas qruplar üçün risk; 150+ hamı üçün riskli)."
+        )
 
 
 # -----------------------------
@@ -754,6 +768,7 @@ if go_button:
     except Exception as e:
         st.error(f"Error: {e}")
         st.exception(e)
+
 
 
 
