@@ -27,7 +27,7 @@ from joblib import load
 st.set_page_config(page_title="Real-Time Air Quality Forecast for Azerbaijan", page_icon="🌤")
 st.title("🌤 Real-Time Air Quality for Azerbaijan")
 st.caption("Short-term air quality prediction (PM2.5, O₃, NO₂, AQI) with ML and CAMS data.")
-st.markdown("<h6 style='text-align:center; color:gray;'>by <b>Skyphoria Team</b></h6>", unsafe_allow_html=True)
+# st.markdown("<h6 style='text-align:center; color:gray;'>by <b></b></h6>", unsafe_allow_html=True)
 st.divider()
 
 
@@ -692,6 +692,7 @@ if go_button:
     except Exception as e:
         st.error(f"Error: {e}")
         st.exception(e)
+
 
 
 
