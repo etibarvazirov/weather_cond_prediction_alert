@@ -53,6 +53,34 @@ st.html("""
 </div>
 """)
 
+st.markdown("""
+<div style="
+    margin-top: 16px;
+    padding: 16px 20px;
+    border-radius: 10px;
+    background-color: #f3ffe8;
+    border-left: 4px solid #8fdc88;
+    box-shadow: 0 1px 5px rgba(0,0,0,0.07);
+">
+
+    <span style="font-size:17px; font-weight:600; color:#234322;">
+        Bu tətbiq nə edir?
+    </span>
+
+    <br><br>
+
+    <span style="font-size:15px; color:#2b4233;">
+        ▸ Azərbaycanın müxtəlif şəhərləri üçün real-time hava keyfiyyəti göstəricilərini (PM2.5, O₃, NO₂, AQI) təqdim edir. <br>
+        ▸ CAMS və Open-Meteo mənbələrindən məlumat alaraq 24–72 saatlıq proqnoz yaradır. <br>
+        ▸ PM2.5 və O₃ üçün xüsusi Machine Learning modellərindən istifadə edir. <br>
+        ▸ NOWCAST (0–2 saatlıq) qısa müddətli vəziyyət qiymətləndirməsi aparır. <br>
+        ▸ AQI əsaslı sağlamlıq tövsiyələri və tədbir məsləhətləri göstərir. <br>
+        ▸ Nəticələri CSV formatında yükləmək mümkündür.
+    </span>
+
+</div>
+""", unsafe_allow_html=True)
+
 
 # -----------------------------
 # Global config / constants
@@ -726,6 +754,7 @@ if go_button:
     except Exception as e:
         st.error(f"Error: {e}")
         st.exception(e)
+
 
 
 
