@@ -24,8 +24,71 @@ from joblib import load
 # Global config / constants
 # -----------------------------
 
+# ===========================
+# CUSTOM NAVBAR-STYLE HEADER
+# ===========================
+st.markdown(
+    """
+    <div style="
+        width: 100%;
+        padding: 18px 25px;
+        border-radius: 12px;
+        background: linear-gradient(135deg, #d7f8d0, #bff2c4);
+        box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        border: 1px solid #a4e7a1;
+        ">
+        
+        <h1 style="
+            margin: 0;
+            padding: 0;
+            text-align: center;
+            color: #1f3b2d;
+            font-size: 30px;
+            font-weight: 700;
+        ">
+            🌿 Azərbaycan üçün Real-Time AQI & Hava Keyfiyyəti Proqnozu
+        </h1>
+
+        <p style="
+            text-align: center;
+            margin-top: 8px;
+            font-size: 15px;
+            color: #2f4f3f;
+        ">
+            PM2.5, O₃, NO₂ və AQI üçün qısa müddətli proqnozlar — ML modelləri və
+            Open-Meteo / CAMS məlumatları əsasında.
+        </p>
+    </div>
+    """,
+    unsafe_allow_html=True
+)
+
+# Qısa informasiya blokunu da əlavə edirik
+st.markdown(
+    """
+    <div style="
+        margin-top: 18px;
+        padding: 14px 20px;
+        border-radius: 10px;
+        background-color: #f4fff1;
+        border-left: 4px solid #8fdc88;
+        box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+        color: #2a3b31;
+        ">
+        <b>Bu tətbiq nə edir?</b><br>
+        ▸ Azərbaycan şəhərləri üçün real-time hava keyfiyyəti analizini təqdim edir.<br>
+        ▸ PM2.5, O₃ və NO₂ konsentrasiyasını həm CAMS məlumatları, həm də öz ML modellərinlə proqnozlaşdırır.<br>
+        ▸ 0–2 saatlıq <i>nowcast</i> və 24–72 saatlıq proqnoz yaradır.<br>
+        ▸ AQI-ni avtomatik hesablayır və sağlamlıq üzrə qısa tövsiyələr verir.<br>
+        ▸ Bütün nəticələri CSV kimi endirməyə imkan yaradır.
+    </div>
+    """,
+    unsafe_allow_html=True
+)
+
+
 st.set_page_config(page_title="Real-Time Air Quality Forecast for Azerbaijan", page_icon="🌤")
-st.title("🌤 Real-Time Air Quality for Azerbaijan")
+# st.title("🌤 Real-Time Air Quality for Azerbaijan")
 st.caption("Short-term air quality prediction (PM2.5, O₃, NO₂, AQI) with ML and CAMS data.")
 # st.markdown("<h6 style='text-align:center; color:gray;'>by <b></b></h6>", unsafe_allow_html=True)
 st.divider()
@@ -692,6 +755,7 @@ if go_button:
     except Exception as e:
         st.error(f"Error: {e}")
         st.exception(e)
+
 
 
 
