@@ -53,33 +53,33 @@ st.html("""
 </div>
 """)
 
-st.markdown("""
-<div style="
-    margin-top: 16px;
-    padding: 16px 20px;
-    border-radius: 10px;
-    background-color: #f3ffe8;
-    border-left: 4px solid #8fdc88;
-    box-shadow: 0 1px 5px rgba(0,0,0,0.07);
-">
+with st.container():
+    st.success(
+        "### 🌿 Tətbiq haqqında ümumi məlumat\n"
+        "Bu tətbiq Azərbaycan üzrə real-time hava keyfiyyəti göstəricilərini (PM2.5, O₃, NO₂) toplamaq, "
+        "təhlil etmək və 24–72 saatlıq proqnoz təqdim etmək üçün hazırlanmışdır. "
+        "Eyni zamanda 0–2 saatlıq NOWCAST modeli vasitəsilə ən yaxın zaman üçün vəziyyəti qiymətləndirir.\n\n"
 
-    <span style="font-size:17px; font-weight:600; color:#234322;">
-        Bu tətbiq nə edir?
-    </span>
+        "🌬️ **Real-time məlumatlar:** Open-Meteo CAMS və digər açıq mənbələrdən alınır.\n"
+        "🌡️ **ML əsaslı proqnoz:** PM2.5 və O₃ üçün xüsusi Machine Learning modelləri istifadə olunur.\n"
+        "📊 **Sağlamlıq təhlili:** AQI göstəricisinə görə avtomatik olaraq təhlükə səviyyəsi və tövsiyələr təqdim edilir.\n"
+        "⬇️ **Yükləmə:** Proqnoz və nowcast nəticələrini CSV formatında yükləmək mümkündür.\n\n"
 
-    <br><br>
+        "### 📘 Parametrlərin izahı və aralıqları\n"
+        "🌫️ **PM2.5 (2.5 mikronlu toz hissəcikləri)** — Ağciyərlərə dərin nüfuz edir, "
+        "ürək-damar və tənəffüs xəstəliklərini artırır.\n"
+        "**Aralıq:** 0–500 µg/m³ (0–12 yaxşı; 12–35 orta; 35+ risklidir).\n\n"
 
-    <span style="font-size:15px; color:#2b4233;">
-        ▸ Azərbaycanın müxtəlif şəhərləri üçün real-time hava keyfiyyəti göstəricilərini (PM2.5, O₃, NO₂, AQI) təqdim edir. <br>
-        ▸ CAMS və Open-Meteo mənbələrindən məlumat alaraq 24–72 saatlıq proqnoz yaradır. <br>
-        ▸ PM2.5 və O₃ üçün xüsusi Machine Learning modellərindən istifadə edir. <br>
-        ▸ NOWCAST (0–2 saatlıq) qısa müddətli vəziyyət qiymətləndirməsi aparır. <br>
-        ▸ AQI əsaslı sağlamlıq tövsiyələri və tədbir məsləhətləri göstərir. <br>
-        ▸ Nəticələri CSV formatında yükləmək mümkündür.
-    </span>
+        "🌬️ **O₃ (Ozon)** — Günəş işığı + çirkli hava reaksiyası ilə yaranır, göz və ağciyərləri qıcıqlandırır.\n"
+        "**Aralıq:** 0–200 ppb (0–70 yaxşı; 70–120 orta; 120+ riskli).\n\n"
 
-</div>
-""", unsafe_allow_html=True)
+        "🚗 **NO₂ (Azot dioksidi)** — Nəqliyyat və sənaye emissiyalarından yaranır, astmanı ağırlaşdırır.\n"
+        "**Aralıq:** 0–300+ ppb (0–50 yaxşı; 50–100 orta; 100+ riskli).\n\n"
+
+        "📊 **AQI (Air Quality Index)** — Havanın ümumi keyfiyyət göstəricisidir, ən yüksək risk yaradan komponentə əsaslanır.\n"
+        "**Aralıq:** 0–500 (0–50 yaxşı; 50–100 orta; 100–150 həssas qruplar üçün risk; 150+ hamı üçün riskli)."
+    )
+
 
 
 # -----------------------------
@@ -754,6 +754,7 @@ if go_button:
     except Exception as e:
         st.error(f"Error: {e}")
         st.exception(e)
+
 
 
 
