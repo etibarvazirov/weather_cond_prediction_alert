@@ -722,6 +722,11 @@ if go_button:
         
         st.markdown("### 🧭 Current conditions")
         st.markdown(f"""
+        <style>
+            #MainMenu {visibility: hidden;}
+            footer {visibility: hidden;}
+            header {visibility: hidden;}
+        </style>
         <div style="padding:14px;border-radius:12px;background-color:{color};color:black;">
           <h3 style="text-align:center;margin:0;">AQI: {aqi_val_int if aqi_val_int is not None else 'N/A'}</h3>
           <p style="text-align:center;margin:6px 0 0 0;">{interpret_aqi(aqi_now)}</p>
@@ -768,6 +773,7 @@ if go_button:
     except Exception as e:
         st.error(f"Error: {e}")
         st.exception(e)
+
 
 
 
